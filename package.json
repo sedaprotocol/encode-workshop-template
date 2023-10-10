@@ -1,0 +1,27 @@
+{
+  "name": "myfirstdatarequest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build:debug": "asc assembly/index.ts --target debug",
+    "build:release": "asc assembly/index.ts --target release",
+    "build": "npm run build:debug && npm run build:release",
+    "test": "npm run build && NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@seda-protocol/cli": "^0.0.1",
+    "@types/jest": "^29.5.5",
+    "assemblyscript": "^0.27.11",
+    "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "@seda-protocol/as-sdk": "^0.0.1",
+    "@seda-protocol/vm": "^0.0.1",
+    "assemblyscript-json": "^1.1.0"
+  }
+}

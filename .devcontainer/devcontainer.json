@@ -1,0 +1,23 @@
+{
+  "name": "SEDA SDK Starter Template",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "VARIANT": "18"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {},
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "nrwl.angular-console",
+        "Orta.vscode-jest",
+        "dtsvet.vscode-wasm"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install"
+}
