@@ -1,24 +1,21 @@
-import { Process, httpFetch, JSON } from "@seda-protocol/as-sdk/assembly";
+import { Process, httpFetch } from "@seda-protocol/as-sdk/assembly";
+import { JSON } from "json-as/assembly";
+
+// @ts-expect-error assemblyscript @json is not compatible with TypeScript
+@json
+class SwPlanet {
+  name!: string
+}
 
 function main(): void {
   const response = httpFetch("https://swapi.dev/api/planets/1/");
   const fulfilled = response.fulfilled;
 
   if (fulfilled !== null) {
-    const jsonResponse = fulfilled.json();
+    const data = String.UTF8.decode(fulfilled.bytes.buffer);
+    const planet = JSON.parse<SwPlanet>(data);
 
-    if (jsonResponse.isObj) {
-      const obj = <JSON.Obj>jsonResponse;
-      const name = obj.getString("name");
-
-      if (name !== null) {
-        Process.exit_with_message(0, name.valueOf());
-      } else {
-        Process.exit_with_message(1, "Object 'name' is null");
-      }
-    } else {
-      Process.exit_with_message(1, "Error JSON response was not an object");
-    }
+    Process.exit_with_message(0, planet.name);
   } else {
     Process.exit_with_message(1, "Error while fetching");
   }

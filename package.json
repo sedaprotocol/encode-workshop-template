@@ -16,12 +16,13 @@
   "devDependencies": {
     "@seda-protocol/cli": "^0.0.1",
     "@types/jest": "^29.5.5",
-    "assemblyscript": "^0.27.11",
-    "jest": "^29.7.0"
+    "assemblyscript": "0.25.2",
+    "jest": "^29.7.0",
+    "visitor-as": "^0.11.4"
   },
   "dependencies": {
     "@seda-protocol/as-sdk": "^0.0.1",
     "@seda-protocol/vm": "^0.0.1",
-    "assemblyscript-json": "^1.1.0"
+    "json-as": "^0.5.65"
   }
 }
