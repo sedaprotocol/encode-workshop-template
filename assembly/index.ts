@@ -1,7 +1,5 @@
-import { Process, httpFetch } from "@seda-protocol/as-sdk/assembly";
-import { JSON } from "json-as/assembly";
+import { Process, httpFetch, JSON } from "@seda-protocol/as-sdk/assembly";
 
-// @ts-expect-error assemblyscript @json is not compatible with TypeScript
 @json
 class SwPlanet {
   name!: string

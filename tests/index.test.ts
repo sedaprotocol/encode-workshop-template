@@ -1,3 +1,4 @@
+import { describe, it, expect } from "bun:test";
 import { callVm } from "@seda-protocol/vm";
 import { readFile } from "node:fs/promises";
 

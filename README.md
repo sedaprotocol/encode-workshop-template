@@ -13,7 +13,7 @@ Includes an example of how to fetch an API that returns JSON and how to parse it
 
 ## Requirements
 
-* Have Node.js installed in your system OR
+* Have [Bun](https://bun.sh/) installed in your system OR
 * Use the devcontainer which installs all requirements for you
 
 
@@ -22,12 +22,12 @@ Includes an example of how to fetch an API that returns JSON and how to parse it
 To build the binaries:
 
 ```sh
-npm run build
+bun run build
 ```
 
 To test the binary it uses `@seda-protocol/vm` which allows you to run WASM binaries locally:
 
 ```sh
-npm test
+bun run test
 ```
 
