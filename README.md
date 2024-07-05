@@ -38,6 +38,12 @@ To build the binary with the debug profile run:
 bun run build:debug
 ```
 
+To build the contracts:
+
+```sh
+bun run build:contracts
+```
+
 You can also generate both with the shorthand command:
 
 ```sh
@@ -74,6 +80,86 @@ Uploading a WASM binary requires submitting a transaction, make sure the `.env` 
 bunx seda-sdk wasm upload PATH_TO_BUILD
 ```
 
+Or you can use one of the following commands:
+
+```sh
+bun run deploy:debug
+
+bun run deploy:release
+```
+
+### Deploying contract
+
+You can deploy the EVM contract on Base Sepolia using the following command:
+
+```sh
+bun run deploy:contracts
+```
+
+Make sure you have the following environment variables filled in:
+
+```sh
+# Your EVM private key in order to deploy the consumer contract
+# This example deploys on Base Sepolia, so it requires you to have some Base Sepolia ETH
+EVM_PRIVATE_KEY=
+
+# Used to verify the contract on Base Sepolia
+ETHERSCAN_API_KEY=
+
+# Used for posting data request on the seda chain and configuring the consumer contract
+# You can get this by running `bunx seda-sdk wasm upload PATH_TO_BUILD`
+DR_BINARY_ID=
+```
+
 ### Integration Testing
 
 `@seda-protocol/dev-tools` exposes functions that make it easy to create scripts that submit Data Requests to the SEDA network and await the result. The `scripts` directory shows an example.
+
+### Creating a Data Request
+
+Creating a Data Request can be done through the consumer contract (which will be relayed if there is an active relayer) or through immidiatly posting a Data Request on the SEDA chain.
+
+Posting through the SEDA chain:
+
+```sh
+bun run post-dr
+```
+
+This will post a transaction and wait till there is an result.
+Make sure you have the following environment variables filled in:
+
+```sh
+# RPC for the SEDA network you want to interact with
+SEDA_RPC_ENDPOINT=https://rpc.devnet.seda.xyz
+
+# Your SEDA chain mnemonic, fill this in to upload binaries or interact with data requests directly
+SEDA_MNEMONIC=
+
+# Used for posting data request on the seda chain and configuring the consumer contract
+# You can get this by running `bunx seda-sdk wasm upload PATH_TO_BUILD`
+DR_BINARY_ID=
+```
+
+Through the deployed consumer contract:
+
+```sh
+bun run contract:transmit
+```
+
+After a few seconds you can get the result back and read it using:
+
+```sh
+bun run contract:latestAnswer
+```
+
+You need the following environment variables for this to work:
+
+```sh
+# Used so you can call transmit `bun run contract:transmit` and `bun run contract:latestAnswer`
+# You can get this by running `bun run deploy:contracts`
+EVM_PRICEFEED_ADDRESS=
+
+# Your EVM private key in order to deploy the consumer contract
+# This example deploys on Base Sepolia, so it requires you to have some Base Sepolia ETH
+EVM_PRIVATE_KEY=
+```
