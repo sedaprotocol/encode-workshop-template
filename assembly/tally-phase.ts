@@ -1,4 +1,4 @@
-import { Tally, Process, JSON } from "@seda-protocol/as-sdk/assembly";
+import { Tally, Process } from "@seda-protocol/as-sdk/assembly";
 import { jsonArrToUint8Array } from "@seda-protocol/as-sdk/assembly/json-utils";
 import { median } from "./services/median";
 import { u128 } from "as-bignum/assembly";

@@ -1,4 +1,4 @@
-import { JSON, Process } from "@seda-protocol/as-sdk/assembly";
+import { Process } from "@seda-protocol/as-sdk/assembly";
 import { fetchBinance } from "./services/binance-service";
 import { fetchKucoin } from "./services/kucoin-service";
 import { fetchOkx } from "./services/okx-service";
