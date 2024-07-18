@@ -6,6 +6,12 @@
       "VARIANT": "1.1.13"
     }
   },
+  "features": {
+    "node": {
+        "version": "lts",
+        "nodeGypDependencies": true
+    }
+  },
   "customizations": {
     "vscode": {
       "settings": {},
