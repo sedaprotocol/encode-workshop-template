@@ -5,7 +5,9 @@ RUN apt-get update \
     && apt-get -y install --no-install-recommends \
     git \
     nano \
+    unzip \
     vim-tiny \
+    ssh \
     && apt-get auto-remove -y \
     && apt-get clean -y \
     && chsh -s $(which bash) bun \

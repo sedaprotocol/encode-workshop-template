@@ -4,6 +4,8 @@ import { median } from "./services/median";
 import { u128 } from "as-bignum/assembly";
 
 export function tallyPhase(): void {
+    // Allows you to access tally inputs 
+    // in this example we don't need it
     const inputs = Process.getInputs();
 
     const reveals = Tally.getConsensusReveals();
