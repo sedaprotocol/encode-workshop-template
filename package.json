@@ -24,13 +24,13 @@
   "license": "ISC",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "@seda-protocol/dev-tools": "^0.0.3",
+    "@seda-protocol/dev-tools": "^0.0.4",
     "@types/bun": "^1.1.6",
     "assemblyscript": "0.25.2",
     "hardhat": "^2.22.6"
   },
   "dependencies": {
-    "@seda-protocol/as-sdk": "^0.0.3",
+    "@seda-protocol/as-sdk": "^0.0.4",
     "@seda-protocol/vm": "^0.0.3",
     "as-bignum": "^0.3.1",
     "@seda-protocol/contracts": "0.0.1"
