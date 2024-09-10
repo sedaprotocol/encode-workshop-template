@@ -1,48 +1,49 @@
-import { Process, Console } from "@seda-protocol/as-sdk/assembly";
-import { fetchBinance } from "./services/binance-service";
-import { fetchKucoin } from "./services/kucoin-service";
-import { fetchOkx } from "./services/okx-service";
-import { median } from "./services/median";
+import {
+  Process,
+  Console,
+  JSON,
+  httpFetch,
+  Bytes,
+} from "@seda-protocol/as-sdk/assembly";
 
 export function executionPhase(): void {
-  const drInputsRaw = String.UTF8.decode(Process.getInputs().buffer);
+  // DR Execution inputs
+  const drInputsRaw = Process.getInputs().toUtf8String();
   Console.log("Fetching price for pair: " + drInputsRaw);
   const drInputs = drInputsRaw.split("-");
   const symbolA = drInputs[0];
   const symbolB = drInputs[1];
-  const prices: f64[] = [];
 
-  const binance = fetchBinance(symbolA, symbolB);
+  // Response from Price Feed API
+  const response = httpFetch(
+    `https://api.binance.com/api/v3/ticker/price?symbol=${symbolA.toUpperCase()}${symbolB.toUpperCase()}`
+  );
 
-  if (!binance.success) {
-    Console.error(binance.value);
+  // Response is fulfilled
+  if (response.isFulfilled()) {
+    const result = JSON.parse<BinanceResponse>(
+      response.unwrap().bytes.toUtf8String()
+    );
+
+    const price = f64.parse(result.price).toString();
+    Console.log("Price Feed price: " + price);
+
+    Process.success(Bytes.fromString(price));
   } else {
-    const price = f64.parse(binance.value);
-    Console.log("Binance price: " + price.toString());
-    prices.push(price);
+    // Response is rejected
+    const error = response.unwrapRejected();
+    Console.log(
+      "HTTP Response was rejected: " +
+        error.status.toString() +
+        " - " +
+        error.bytes.toUtf8String()
+    );
+
+    Process.error(Bytes.fromString("Error while fetching"), 1);
   }
+}
 
-  const kucoin = fetchKucoin(symbolA, symbolB);
-
-  if (!kucoin.success) {
-    Console.error(kucoin.value);
-  } else {
-    const price = f64.parse(kucoin.value);
-    Console.log("Kucoin price: " + price.toString());
-    prices.push(price);
-  }
-
-  const okx = fetchOkx(symbolA, symbolB);
-
-  if (!okx.success) {
-    Console.error(okx.value);
-  } else {
-    const price = f64.parse(okx.value);
-    Console.log("Okx price: " + price.toString());
-    prices.push(price);
-  }
-
-  const medianPrice = median(prices);
-
-  Process.exit_with_message(0, medianPrice.toString());
+@json
+class BinanceResponse {
+  price!: string;
 }

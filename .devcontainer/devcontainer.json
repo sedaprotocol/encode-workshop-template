@@ -1,5 +1,5 @@
 {
-  "name": "seda-sdk-starter-kit",
+  "name": "seda-request-starter-kit",
   "build": {
     "dockerfile": "Dockerfile",
     "args": {

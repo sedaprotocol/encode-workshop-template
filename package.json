@@ -1,38 +1,26 @@
 {
-  "name": "myfirstdatarequest",
+  "name": "seda-request-starter-kit",
   "version": "0.0.1",
   "description": "",
   "scripts": {
+    "build": "asc ./assembly/index.ts --target release",
     "build:debug": "asc ./assembly/index.ts --target debug",
-    "build:release": "asc ./assembly/index.ts --target release",
-    "build": "bun run build:debug && bun run build:release && bun run build:contracts",
-    "build:contracts": "bunx hardhat typechain && bunx hardhat compile",
-
-    "post-dr": "bun run ./scripts/post-dr.mts",
-
+    "deploy": "bun run build:release && bunx seda-sdk wasm upload ./build/release.wasm",
     "deploy:debug": "bun run build:debug && bunx seda-sdk wasm upload ./build/debug.wasm",
-    "deploy:release": "bun run build:release && bunx seda-sdk wasm upload ./build/release.wasm",
-    "deploy:contracts": "bun run build:contracts && bunx hardhat deploy:PriceFeed --network sepoliaBase --verify",
-    
-    "contract:transmit": "bunx hardhat transmit:PriceFeed --network sepoliaBase",
-    "contract:latestAnswer": "bunx hardhat latestAnswer:PriceFeed --network sepoliaBase",
-    
-    "test": "bun run build && bun test"
+    "post-dr": "bun run ./scripts/post-dr.mts",
+    "test": "bun run build:debug && bun test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "@seda-protocol/dev-tools": "^0.0.4",
+    "@seda-protocol/dev-tools": "^0.0.7",
     "@types/bun": "^1.1.6",
-    "assemblyscript": "0.25.2",
-    "hardhat": "^2.22.6"
+    "assemblyscript": "^0.27.29"
   },
   "dependencies": {
-    "@seda-protocol/as-sdk": "^0.0.4",
+    "@seda-protocol/as-sdk": "^0.0.8",
     "@seda-protocol/vm": "^0.0.3",
-    "as-bignum": "^0.3.1",
-    "@seda-protocol/contracts": "0.0.2"
+    "as-bignum": "^0.3.1"
   }
 }
