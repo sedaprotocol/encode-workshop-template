@@ -5,56 +5,46 @@
 </p>
 
 <h1 align="center">
-  SEDA SDK Starter Template
+  SEDA Request Starter Kit
 </h1>
 
-Starter template to create Data Requests on the SEDA network using AssemblyScript.
-This is meant as a showcase of what a project utilising SEDA looks like and can serve as a jump off point for your own project.
+This starter kit helps you create Data Requests (also known as Oracle Programs) on the SEDA network using AssemblyScript. It showcases a basic project setup and serves as a foundation for building more complex projects.
 
 ## Requirements
 
-* Have [Bun](https://bun.sh/) installed in your system OR
-* Use the [devcontainer](https://containers.dev/) which installs all requirements for you
+- **Bun**: Install [Bun](https://bun.sh/) for package management and building.
+- Alternatively, use the [devcontainer](https://containers.dev/) for a pre-configured environment.
 
 ## Getting started
 
-A complete Data Request cycle goes through 2 WASM VM executions: the execution phase and the tally phase. It's possible to specify different binaries for the phases, or alternatively specify a single binary and add a branching condition for the execution phase and tally phase. This branching is required as the available functions and environment variables are different between the 2 phases.
+A Data Request execution involves two phases executed in a WASM VM:
 
-This project uses the dual structure to simplify testing and uploading.
+1. **Execution Phase**: The phase where non-deterministic operations occur. It can access public data via `http_fetch` or `proxy_http_fetch` calls. Multiple executor nodes run this phase and submit their reports to the SEDA network.
 
-The source code for the Data Request binary lives in the `assembly` directory. This includes a `tsconfig.json` to configure the editor to process all files in the directory as AssemblyScript.
+2. **Tally Phase**: Aggregates reports from the execution phase using custom logic to determine a final result.
+
+> [!NOTE]
+> This starter kit uses the same binary for both phases, but you can specify different binaries and add branching logic if needed.
 
 ### Building
 
-To build the binary with the release profile run:
-
-```sh
-bun run build:release
-```
-
-To build the binary with the debug profile run:
-
-```sh
-bun run build:debug
-```
-
-To build the contracts:
-
-```sh
-bun run build:contracts
-```
-
-You can also generate both with the shorthand command:
+To build the Data Request binary, run the following (builds using the release profile by default):
 
 ```sh
 bun run build
 ```
 
+To build the binary with the debug profile, run:
+
+```sh
+bun run build:debug
+```
+
 ### Local Testing
 
-To test the binary this project uses `@seda-protocol/vm` and `@seda-protocol/dev-tools` which allows makes it easy to run the binary in a local WASM VM and provide different test cases for it. Your tests should use the compiled WASM code, so make sure to build the binary before running tests. In this project the `test` script in the `package.json` always calls `bun run build` before running the test.
+To test the binary, this project uses `@seda-protocol/vm` and `@seda-protocol/dev-tools`. These tools help run the binary in a local WASM VM and test different scenarios.
 
-This project uses Bun's built in test runner, but any JavaScript/TypeScript testing framework should work.
+This project uses Bun's built-in test runner, but other JavaScript/TypeScript testing frameworks should also work.
 
 > [!WARNING]
 > The `@seda-protocol/vm` package might not work properly in Node.js. Try setting the environment variable `NODE_OPTIONS=--experimental-vm-modules` before running the test command.
@@ -63,9 +53,37 @@ This project uses Bun's built in test runner, but any JavaScript/TypeScript test
 bun run test
 ```
 
-### Uploading
+## Implement your Data Requests
 
-Installing `@seda-protocol/dev-tools` also installs a CLI to easily upload new WASM binaries, query an existing binary, or request a list of existing binaries. The CLI requires a RPC endpoint which can be provided through a `.env` file or a flag:
+Use these key components to create and define your Data Requests. The starter kit provides a base for building Oracle Programs on the SEDA network:
+
+- **`src/index.ts`**: The entry point that coordinates both the execution and tally phases of your Data Request.
+
+- **`src/execution-phase.ts`**: Manages the fetching and processing of price data from APIs. This phase involves non-deterministic operations as it can access public data via `http_fetch` and `proxy_http_fetch` calls. Multiple Executor Nodes run this phase, each producing a report that is sent to the SEDA network.
+
+- **`src/tally-phase.ts`**: Aggregates results from multiple Executor reports and calculates the final output using consensus data. This phase is deterministic, combining results from Executor Nodes to reach a consensus.
+
+### Utilities and Functions
+
+The following are some of the key utilities and functions from the `@seda-protocol/as-sdk/assembly` library used in the example provided in this starter kit. These tools help you build and define your Data Requests. While these are a few important ones, the SDK offers additional utilities to explore:
+
+- **`Process`**: Manages inputs and outputs, allowing interaction with the WASM VM.
+- **`http_fetch`**: Fetches data from public APIs.
+- **`Console`**: Provides logging capabilities to debug and track the execution of your code.
+- **`JSON`**: Facilitates parsing and handling JSON data.
+- **`Bytes`**: Assists in working with byte arrays, useful for encoding and decoding data.
+
+These components and utilities serve as a foundation for developing your Data Request logic. For a complete list of utilities and advanced usage, refer to the official documentation.
+
+## Interacting with SEDA Networks
+
+You can upload Data Requests and interact with the SEDA network using the CLI tools provided by `@seda-protocol/dev-tools`.
+
+### Uploading a Data Request
+
+Use the CLI to upload a WASM binary and list existing binaries. The CLI requires an RPC endpoint, which can be set via a `.env` file or a command flag (see [`.env.example`](.env.example) file).
+
+List existing binaries (requires `RPC_SEDA` environment variable):
 
 ```sh
 # With .env file
@@ -74,59 +92,30 @@ bunx seda-sdk wasm list
 bunx seda-sdk wasm list --rpc https://rpc.devnet.seda.xyz
 ```
 
-Uploading a WASM binary requires submitting a transaction, make sure the `.env` file contains a mnemonic for a wallet that has enough funds to submit transactions.
+Upload a WASM binary (requires `RPC_SEDA_ENDPOINT` and `MNEMONIC` environment variables):
 
 ```sh
 bunx seda-sdk wasm upload PATH_TO_BUILD
 ```
 
-Or you can use one of the following commands:
+Alternatively, you can use one of the following commands:
 
 ```sh
-bun run deploy:debug
-
-bun run deploy:release
+bun run deploy
 ```
 
-### Deploying contract
-
-You can deploy the EVM contract on Base Sepolia using the following command:
-
-```sh
-bun run deploy:contracts
-```
-
-Make sure you have the following environment variables filled in:
-
-```sh
-# Your EVM private key in order to deploy the consumer contract
-# This example deploys on Base Sepolia, so it requires you to have some Base Sepolia ETH
-EVM_PRIVATE_KEY=
-
-# Used to verify the contract on Base Sepolia
-ETHERSCAN_API_KEY=
-
-# Used for posting data request on the seda chain and configuring the consumer contract
-# You can get this by running `bunx seda-sdk wasm upload PATH_TO_BUILD`
-DR_BINARY_ID=
-```
-
-### Integration Testing
+### Submitting a Data Request
 
 `@seda-protocol/dev-tools` exposes functions that make it easy to create scripts that submit Data Requests to the SEDA network and await the result. The `scripts` directory shows an example.
 
-### Creating a Data Request
-
-Creating a Data Request can be done through the consumer contract (which will be relayed if there is an active relayer) or through immidiatly posting a Data Request on the SEDA chain.
-
-Posting through the SEDA chain:
+Submitting a Data Request to the SEDA network run:
 
 ```sh
 bun run post-dr
 ```
 
 This will post a transaction and wait till there is an result.
-Make sure you have the following environment variables filled in:
+Make sure you have the all environment variables set in `.env` file:
 
 ```sh
 # RPC for the SEDA network you want to interact with
@@ -138,28 +127,4 @@ SEDA_MNEMONIC=
 # Used for posting data request on the seda chain and configuring the consumer contract
 # You can get this by running `bunx seda-sdk wasm upload PATH_TO_BUILD`
 DR_BINARY_ID=
-```
-
-Through the deployed consumer contract:
-
-```sh
-bun run contract:transmit
-```
-
-After a few seconds you can get the result back and read it using:
-
-```sh
-bun run contract:latestAnswer
-```
-
-You need the following environment variables for this to work:
-
-```sh
-# Used so you can call transmit `bun run contract:transmit` and `bun run contract:latestAnswer`
-# You can get this by running `bun run deploy:contracts`
-EVM_PRICEFEED_ADDRESS=
-
-# Your EVM private key in order to deploy the consumer contract
-# This example deploys on Base Sepolia, so it requires you to have some Base Sepolia ETH
-EVM_PRIVATE_KEY=
 ```
