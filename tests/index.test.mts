@@ -29,7 +29,7 @@ describe("data request execution", () => {
     );
 
     expect(vmResult.exitCode).toBe(0);
-    expect(vmResult.resultAsString).toBe("1.0");
+    expect(vmResult.resultAsString).toBe("1");
   });
 
   it('should tally all results in a single data point', async () => {
