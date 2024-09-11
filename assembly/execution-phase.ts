@@ -42,7 +42,7 @@ export function executionPhase(): void {
     );
 
     // Report the successful result back to the SEDA network.
-    Process.success(Bytes.fromString(result.price));
+    Process.success(Bytes.fromUtf8String(result.price));
   } else {
     // Handle the case where the HTTP request failed or was rejected.
     const error = response.unwrapRejected();
@@ -54,6 +54,6 @@ export function executionPhase(): void {
     );
 
     // Report the failure to the SEDA network with an error code of 1.
-    Process.error(Bytes.fromString("Error while fetching price feed"), 1);
+    Process.error(Bytes.fromUtf8String("Error while fetching price feed"), 1);
   }
 }

@@ -11,7 +11,7 @@ export function tallyPhase(): void {
   // const tallyInputs = Process.getInputs();
 
   // Get consensus reveals from the tally phase
-  const reveals = Tally.getConsensusReveals();
+  const reveals = Tally.getReveals();
   const prices: f64[] = [];
 
   // Loop through each reveal, parse it as a float (f64), and store it in the prices array
@@ -27,10 +27,10 @@ export function tallyPhase(): void {
     const finalPrice = u128.from(median(prices) * 1000000);
 
     // Report the final price as success in the tally phase
-    Process.success(Bytes.fromString(finalPrice.toString()));
+    Process.success(Bytes.fromUtf8String(finalPrice.toString()));
   } else {
     // If no prices were available, return an error
-    Process.error(Bytes.fromString("No consensus among revealed results"), 1);
+    Process.error(Bytes.fromUtf8String("No consensus among revealed results"), 1);
   }
 }
 
