@@ -81,9 +81,18 @@ You can upload Data Requests and interact with the SEDA network using the CLI to
 
 ### Uploading a Data Request
 
-Use the CLI to upload a WASM binary and list existing binaries. The CLI requires an RPC endpoint, which can be set via a `.env` file or a command flag (see [`.env.example`](.env.example) file).
+To upload a Data Request WASM binary, run:
 
-List existing binaries (requires `RPC_SEDA` environment variable):
+```sh
+bun run deploy
+```
+
+> [!IMPORTANT]  
+> This command requires `RPC_SEDA_ENDPOINT` and `MNEMONIC` environment variables.
+
+Alternatively, you can directly use the CLI to upload a WASM binary and list existing binaries.
+
+List existing binaries (requires `RPC_SEDA_ENDPOINT` environment variable):
 
 ```sh
 # With .env file
@@ -98,24 +107,23 @@ Upload a WASM binary (requires `RPC_SEDA_ENDPOINT` and `MNEMONIC` environment va
 bunx seda-sdk wasm upload PATH_TO_BUILD
 ```
 
-Alternatively, you can use one of the following commands:
-
-```sh
-bun run deploy
-```
-
 ### Submitting a Data Request
 
 `@seda-protocol/dev-tools` exposes functions that make it easy to create scripts that submit Data Requests to the SEDA network and await the result. The `scripts` directory shows an example.
 
-Submitting a Data Request to the SEDA network run:
+Submitting a Data Request to the SEDA network, run:
 
 ```sh
 bun run post-dr
 ```
 
 This will post a transaction and wait till there is an result.
-Make sure you have the all environment variables set in `.env` file:
+
+> [!IMPORTANT]  
+> Make sure you have the all environment variables set in `.env` file.
+
+
+Example of an `.env` file:
 
 ```sh
 # RPC for the SEDA network you want to interact with
