@@ -1,8 +1,8 @@
 import { Signer, buildSigningConfig, postAndAwaitDataRequest } from '@seda-protocol/dev-tools';
 
 async function main() {
-    if (!process.env.DR_BINARY_ID) {
-        throw new Error('Please set the DR_BINARY_ID in your env file');
+    if (!process.env.ORACLE_PROGRAM_ID) {
+        throw new Error('Please set the ORACLE_PROGRAM_ID in your env file');
     }
 
     // Takes the mnemonic from the .env file (SEDA_MNEMONIC and SEDA_RPC_ENDPOINT)
@@ -15,7 +15,7 @@ async function main() {
         consensusOptions: {
             method: 'none'
         },
-        drBinaryId: process.env.DR_BINARY_ID,
+        drBinaryId: process.env.ORACLE_PROGRAM_ID,
         drInputs: Buffer.from('eth-usdc'),
         tallyInputs: Buffer.from([]),
         memo: Buffer.from(new Date().toISOString()),

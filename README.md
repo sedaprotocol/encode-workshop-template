@@ -15,7 +15,7 @@ This starter kit helps you create Data Requests (also known as Oracle Programs) 
 - **Bun**: Install [Bun](https://bun.sh/) for package management and building.
 - Alternatively, use the [devcontainer](https://containers.dev/) for a pre-configured environment.
 
-## Getting started
+## Getting Started
 
 A Data Request execution involves two phases executed in a WASM VM:
 
@@ -134,5 +134,5 @@ SEDA_MNEMONIC=
 
 # Used for posting data request on the seda chain and configuring the consumer contract
 # You can get this by running `bunx seda-sdk wasm upload PATH_TO_BUILD`
-DR_BINARY_ID=
+ORACLE_PROGRAM_ID=
 ```
