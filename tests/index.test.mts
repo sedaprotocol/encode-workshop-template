@@ -43,6 +43,10 @@ describe("data request execution", () => {
     }]);
 
     expect(vmResult.exitCode).toBe(0);
-    expect(vmResult.resultAsString).toBe("245230000");
+    
+    const priceRaw = Buffer.from(vmResult.result ?? []).toString('hex');
+    console.log(priceRaw);
+    const price = BigInt('0x' + priceRaw);
+    expect(price).toBe(245230000n);
   });
 });

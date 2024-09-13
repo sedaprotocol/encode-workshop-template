@@ -2,35 +2,39 @@ import { Tally, Process, Bytes } from "@seda-protocol/as-sdk/assembly";
 import { u128 } from "as-bignum/assembly";
 
 /**
- * This function represents the tally phase in the SEDA network.
- * It calculates the median price from the results revealed during the execution phase and submits it.
- * The number of reveals depends on the data request parameter replication factor.
+ * Executes the tally phase within the SEDA network.
+ * This phase aggregates the results (e.g., price data) revealed during the execution phase,
+ * calculates the median value, and submits it as the final result.
+ * Note: The number of reveals depends on the replication factor set in the data request parameters.
  */
 export function tallyPhase(): void {
-  // We can get tally inputs from Process.getInputs(), but it's unused in this example
+  // Tally inputs can be retrieved from Process.getInputs(), though it is unused in this example.
   // const tallyInputs = Process.getInputs();
 
-  // Get consensus reveals from the tally phase
+  // Retrieve consensus reveals from the tally phase.
   const reveals = Tally.getReveals();
   const prices: f64[] = [];
 
-  // Loop through each reveal, parse it as a float (f64), and store it in the prices array
+  // Iterate over each reveal, parse its content as a floating-point number (f64), and store it in the prices array.
   for (let i = 0; i < reveals.length; i++) {
     const price = f64.parse(reveals[i].reveal.toUtf8String());
     prices.push(price);
   }
 
-  // If there are valid prices, calculate the median price
+  // If there are valid prices revealed, calculate the median price.
   if (prices.length > 0) {
-    // Multiply the median by 1,000,000 to avoid floating-point precision issues
-    // and convert it to a u128 to maintain large precision.
+    // Multiply the median price by 1,000,000 to mitigate floating-point precision issues
+    // and convert it to u128 to handle large numbers with precision.
     const finalPrice = u128.from(median(prices) * 1000000);
 
-    // Report the final price as success in the tally phase
-    Process.success(Bytes.fromUtf8String(finalPrice.toString()));
+    // Convert the final price into a byte array that will be sent to the destination chains.
+    const finalPriceAsByteArray = finalPrice.toUint8Array(true);
+
+    // Report the successful result in the tally phase, encoding the result as bytes.
+    Process.success(Bytes.fromByteArray(finalPriceAsByteArray));
   } else {
-    // If no prices were available, return an error
-    Process.error(Bytes.fromUtf8String("No consensus among revealed results"), 1);
+    // If no valid prices were revealed, report an error indicating no consensus.
+    Process.error(Bytes.fromUtf8String("No consensus among revealed results"));
   }
 }
 

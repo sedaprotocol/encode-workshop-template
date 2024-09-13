@@ -1,16 +1,21 @@
-import { Process } from "@seda-protocol/as-sdk/assembly";
 import { executionPhase } from "./execution-phase";
 import { tallyPhase } from "./tally-phase";
+import { OracleProgram } from "@seda-protocol/as-sdk/assembly";
 
 /**
- * Determines whether the process is running in the
- * execution phase or tally phase based on the environment and
- * executes the appropriate logic.
+ * Defines a price feed oracle program that performs two main tasks:
+ * 1. Fetches non-deterministic price data from external sources during the execution phase.
+ * 2. Aggregates the results from multiple executors in the tally phase and calculates the median.
  */
-if (Process.isDrVmMode()) {
-  // If in Data Request (DR) execution mode, call the execution phase
-  executionPhase();
-} else {
-  // Otherwise, assume it's the tally phase
-  tallyPhase();
+class PriceFeed extends OracleProgram {
+  execution(): void {
+    executionPhase();
+  }
+
+  tally(): void {
+    tallyPhase();
+  }
 }
+
+// Runs the price feed oracle program by executing both phases.
+new PriceFeed().run();
