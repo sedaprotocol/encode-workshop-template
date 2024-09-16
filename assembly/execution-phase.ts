@@ -1,7 +1,6 @@
 import {
   Bytes,
   Console,
-  JSON,
   Process,
   httpFetch,
 } from "@seda-protocol/as-sdk/assembly";
@@ -38,19 +37,16 @@ export function executionPhase(): void {
   );
 
   // Check if the HTTP request was successfully fulfilled.
-  if (response.isFulfilled()) {
-    // Parse the API response, which contains the price as a string.
-    const result = JSON.parse<PriceFeedResponse>(
-      response.unwrap().bytes.toUtf8String()
-    );
-
+  if (response.ok) {
+    // Parse the API response as defined earlier.
+    const result = response.bytes.toJSON<PriceFeedResponse>();
+    
     // Report the successful result back to the SEDA network.
     Process.success(Bytes.fromUtf8String(result.price));
   } else {
     // Handle the case where the HTTP request failed or was rejected.
-    const error = response.unwrapRejected();
-    Console.log(
-      `HTTP Response was rejected: ${error.status.toString()} - ${error.bytes.toUtf8String()}`
+    Console.error(
+      `HTTP Response was rejected: ${response.status.toString()} - ${response.bytes.toUtf8String()}`
     );
 
     // Report the failure to the SEDA network with an error code of 1.
