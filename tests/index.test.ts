@@ -1,6 +1,6 @@
 import { afterEach, describe, it, expect, mock } from "bun:test";
 import { file } from "bun";
-import { executeDrWasm, executeTallyWasm } from "@seda-protocol/dev-tools/src/index.js"
+import { executeDrWasm, executeTallyWasm } from "@seda-protocol/dev-tools"
 
 const WASM_PATH = "build/debug.wasm";
 
