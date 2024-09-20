@@ -136,3 +136,7 @@ SEDA_MNEMONIC=
 # You can get this by running `bunx seda-sdk wasm upload PATH_TO_BUILD`
 ORACLE_PROGRAM_ID=
 ```
+
+## License
+
+Contents of this repository are open source under [MIT License](LICENSE).
