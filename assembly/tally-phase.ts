@@ -25,7 +25,8 @@ export function tallyPhase(): void {
     const finalPrice = median(prices);
 
     // Report the successful result in the tally phase, encoding the result as bytes.
-    Process.success(Bytes.fromNumber(finalPrice));
+    // Encoding result with big endian to decode from EVM contracts.
+    Process.success(Bytes.fromNumber<u128>(finalPrice, true));
   } else {
     // If no valid prices were revealed, report an error indicating no consensus.
     Process.error(Bytes.fromUtf8String("No consensus among revealed results"));

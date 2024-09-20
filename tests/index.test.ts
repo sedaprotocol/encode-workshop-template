@@ -49,8 +49,7 @@ describe("data request execution", () => {
     }]);
 
     expect(vmResult.exitCode).toBe(0);
-    // BigNumber.js is big endian
-    const hex = Buffer.from(vmResult.result.toReversed()).toString('hex');
+    const hex = Buffer.from(vmResult.result).toString('hex');
     const result = BigNumber(`0x${hex}`);
     expect(result).toEqual(BigNumber('2452300032'));
   });
