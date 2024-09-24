@@ -16,7 +16,7 @@ async function main() {
             method: 'none'
         },
         drBinaryId: process.env.ORACLE_PROGRAM_ID,
-        drInputs: Buffer.from('eth-usdc'),
+        drInputs: Buffer.from(""),
         tallyInputs: Buffer.from([]),
         memo: Buffer.from(new Date().toISOString()),
     }, {});
