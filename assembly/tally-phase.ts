@@ -1,4 +1,4 @@
-import { Tally, Process, Bytes, u128, Console } from "@seda-protocol/as-sdk/assembly";
+import { Tally, Process } from "@seda-protocol/as-sdk/assembly";
 
 /**
  * Executes the tally phase within the SEDA network.

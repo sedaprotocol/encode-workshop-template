@@ -1,16 +1,8 @@
 import {
   Bytes,
-  Console,
   Process,
-  httpFetch,
-  u128,
 } from "@seda-protocol/as-sdk/assembly";
 
-// API response structure for the price feed
-@json
-class PriceFeedResponse {
-  price!: string;
-}
 
 /**
  * Executes the data request phase within the SEDA network.
